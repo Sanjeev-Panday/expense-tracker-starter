@@ -15,13 +15,18 @@ No test suite is configured.
 
 ## Architecture
 
-This is a single-component React app (Vite + React 19). All logic lives in `src/App.jsx` — there are no sub-components, routing, or external state libraries.
+React 19 app built with Vite. No routing, no external state libraries.
 
-**Known intentional issues (course material):**
-- `amount` is stored as a string on each transaction, so `.reduce((sum, t) => sum + t.amount, 0)` produces string concatenation instead of numeric addition — the Income, Expenses, and Balance totals display incorrectly.
-- Transaction #4 ("Freelance Work") is typed as `"expense"` in the seed data but categorized as `"salary"` — an inconsistency left in for the course.
-- The UI is intentionally sparse; `App.css` includes a `.delete-btn` class but no delete functionality is wired up.
+**Component tree:**
+- `App` — holds the `transactions` array in state and passes it down; the only place `setTransactions` is called
+  - `Summary` — receives `transactions`, computes `totalIncome`, `totalExpenses`, and `balance` internally
+  - `TransactionForm` — owns its own form state (description, amount, type, category); calls `onAdd(transaction)` prop on submit
+  - `TransactionList` — owns its own filter state (filterType, filterCategory); receives `transactions` and renders the filtered table
 
-**State shape:** all state is local `useState` in `App`. Transactions are objects with `{ id, description, amount, type, category, date }` where `amount` is a string.
+**Transaction shape:** `{ id, description, amount, type, category, date }` where `amount` is a number, `type` is `"income"` or `"expense"`, and `category` is one of `["food", "housing", "utilities", "transport", "entertainment", "salary", "other"]`. The `categories` array is defined locally in both `TransactionForm` and `TransactionList`.
+
+**Known intentional issue (course material):**
+- Transaction #4 ("Freelance Work") is typed as `"expense"` but categorized as `"salary"` in the seed data.
+- `App.css` includes a `.delete-btn` class but no delete functionality is wired up.
 
 **Styling:** plain CSS in `src/App.css` (component styles) and `src/index.css` (global reset + body). No CSS framework or preprocessor.
