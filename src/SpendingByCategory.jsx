@@ -1,14 +1,6 @@
 import { BarChart, Bar, Cell, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
-
-const categoryColors = {
-  food: "#3b6fd6",
-  housing: "#1e9e74",
-  utilities: "#d69a2d",
-  transport: "#7a5ac1",
-  entertainment: "#c1447b",
-  salary: "#e0663d",
-  other: "#8a8f94",
-};
+import { getCategoryColor } from './categoryColors';
+import { formatCurrency } from './format';
 
 function SpendingByCategory({ transactions }) {
   const totalsByCategory = transactions
@@ -24,35 +16,40 @@ function SpendingByCategory({ transactions }) {
     <div className="spending-chart">
       <h2>Spending by Category</h2>
       {data.length === 0 ? (
-        <p className="empty-state">No expenses yet</p>
+        <p className="empty-state">No expenses recorded yet. Add one below to see it here.</p>
       ) : (
         <ResponsiveContainer width="100%" height={280}>
           <BarChart data={data} margin={{ top: 5, right: 20, left: 0, bottom: 5 }}>
-            <CartesianGrid strokeDasharray="3 3" stroke="#e3e6e1" vertical={false} />
+            <CartesianGrid strokeDasharray="3 3" stroke="rgba(201, 162, 39, 0.15)" vertical={false} />
             <XAxis
               dataKey="category"
-              tick={{ fontSize: 12, fill: "#5b6168", fontFamily: "Inter, sans-serif" }}
+              tick={{ fontSize: 12, fill: "#9fbba8", fontFamily: "IBM Plex Mono, monospace" }}
+              axisLine={{ stroke: "rgba(201, 162, 39, 0.28)" }}
+              tickLine={false}
             />
             <YAxis
-              tick={{ fontSize: 12, fill: "#5b6168", fontFamily: "IBM Plex Mono, monospace" }}
-              tickFormatter={(value) => `$${value}`}
+              tick={{ fontSize: 12, fill: "#9fbba8", fontFamily: "IBM Plex Mono, monospace" }}
+              tickFormatter={(value) => formatCurrency(value)}
               width={60}
+              axisLine={false}
+              tickLine={false}
             />
             <Tooltip
-              formatter={(value) => `$${value}`}
-              cursor={{ fill: "#f5f6f2" }}
+              formatter={(value) => formatCurrency(value)}
+              cursor={{ fill: "rgba(201, 162, 39, 0.08)" }}
               contentStyle={{
-                background: "#ffffff",
-                border: "1px solid #e3e6e1",
-                borderRadius: 8,
-                fontFamily: "Inter, sans-serif",
-                fontSize: 13,
+                background: "#123522",
+                border: "1px solid rgba(201, 162, 39, 0.4)",
+                borderRadius: 4,
+                color: "#f4efe1",
+                fontFamily: "IBM Plex Mono, monospace",
+                fontSize: 12,
               }}
-              labelStyle={{ color: "#1c2024", fontWeight: 600, marginBottom: 4 }}
+              labelStyle={{ color: "#c9a227" }}
             />
             <Bar dataKey="amount" radius={[4, 4, 0, 0]}>
               {data.map(entry => (
-                <Cell key={entry.category} fill={categoryColors[entry.category] ?? "#898781"} />
+                <Cell key={entry.category} fill={getCategoryColor(entry.category)} />
               ))}
             </Bar>
           </BarChart>

@@ -18,19 +18,19 @@ function App() {
   ]);
 
   const handleAdd = (transaction) => {
-    setTransactions([...transactions, transaction]);
+    setTransactions(prev => [...prev, transaction]);
   };
 
   const handleDelete = (id) => {
-    setTransactions(transactions.filter(t => t.id !== id));
+    setTransactions(prev => prev.filter(t => t.id !== id));
   };
 
   return (
     <div className="app">
-      <header className="masthead">
-        <p className="eyebrow">Personal Ledger</p>
+      <header className="app-header">
+        <p className="eyebrow">Ledger No. 01</p>
         <h1>Finance Tracker</h1>
-        <p className="subtitle">Track your income and expenses</p>
+        <p className="subtitle">A private record of what comes in and what goes out.</p>
       </header>
 
       <Summary transactions={transactions} />

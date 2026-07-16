@@ -1,4 +1,4 @@
-import { formatCurrency } from './format'
+import { formatCurrency } from './format';
 
 function Summary({ transactions }) {
   const totalIncome = transactions
